@@ -13,5 +13,22 @@
   "word-count": true,
   "file-recovery": true,
   "save-query": false,
-  "sync": false
+  "sync": false,
+  "file-explorer": true,
+  "canvas": true,
+  "footnotes": false,
+  "properties": true,
+  "templates": true,
+  "slash-command": false,
+  "editor-status": true,
+  "bookmarks": true,
+  "zk-prefixer": false,
+  "random-note": false,
+  "outline": true,
+  "slides": false,
+  "audio-recorder": false,
+  "workspaces": false,
+  "publish": false,
+  "bases": true,
+  "webviewer": false
 }

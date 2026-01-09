@@ -1,0 +1,13 @@
+# General
+- **Concept:** Approved
+- **Direccion-Arte:** Review
+- **Script:** Ready
+- **Image Prompts:** Ready
+- **Video Prompts:** Ready
+- **Music Prompt:** Ready
+- **Narrador Script:** Ready
+- **Image Generation:** Ready
+- **Video Generation:** Ready
+- **Narrador Generation:** Ready
+- **Music Generation:** Ready
+- **Youtube:** Ready

@@ -1,11 +1,15 @@
-# Dirección de Arte - Space Adventure
+# Personajes
 
+# Locaciones
+
+# Outfits
+
+# Parametros
 ## Paleta de Colores
 - **Color Primario:** #0a1428 (Azul oscuro profundo)
 - **Color Secundario:** #1a472a (Verde oscuro)
 - **Color Acentos:** #ff6b35 (Naranja cálido)
 - **Colores Neutros:** #ffffff, #cccccc
-
 ## Estilo Visual
 **Referencia:**
 Cinematografía futurista y épica, inspirada en películas de ciencia ficción de alto presupuesto.
@@ -37,6 +41,3 @@ Composición profesional con iluminación dramática. Colores fríos en fondos, 
 - Sin texto visible en las imágenes (solo en edición posterior)
 - Mantener consistencia de iluminación entre shots
 - Énfasis en detalles realistas pero cinematográficos
-
-## Estado
-- [x] Dirección de arte aprobada

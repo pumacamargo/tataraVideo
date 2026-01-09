@@ -1,7 +1,5 @@
 {
-  "baseFontSize": 16,
   "baseTheme": "dark",
-  "cssTheme": "",
   "foldHeading": true,
   "foldIndent": true,
   "showLineNumber": true,
