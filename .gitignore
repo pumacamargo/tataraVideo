@@ -1,0 +1,18 @@
+node_modules/
+.env
+.env.local
+.DS_Store
+dist/
+build/
+*.log
+logs/
+media/
+.obsidian/workspace
+.obsidian/plugins
+.obsidian/community-plugins.json
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
