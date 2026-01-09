@@ -1,284 +1,350 @@
 # Tatara Video Generator
 
-Sistema completo de generación de videos AI que integra Claude Code CLI + n8n para crear videos profesionales con aprobaciones paso a paso.
+**Sistema conversacional para crear videos AI profesionales**
 
-## Características
+Integración simple entre Claude Code CLI, n8n, y Obsidian.
 
-- 🎬 **Pipeline de producción**: Script → Shots → Dirección de Arte → Media → Aprobación
-- 📝 **Generación de prompts inteligentes**: Basados en dirección de arte y contenido
-- 🖼️ **Generación paralela de media**: Imágenes, videos, audio y música vía n8n
-- ✅ **Sistema de aprobaciones**: Checklists en Obsidian para cada fase
-- 📊 **Gestión de múltiples proyectos**: Estructura escalable y organizada
-- 🔄 **Iteraciones ágiles**: Regenera media sin perder historial
+## 🎬 Cómo Funciona
 
-## Requisitos
-
-- Node.js 18+
-- npm
-- Obsidian (recomendado)
-- n8n VPS configurado
-
-## Instalación
-
-```bash
-cd tataraVideo
-npm install
-cp .env.example .env
+```
+Tú hablas conmigo → Yo gestiono archivos y prompts → n8n genera media → Obsidian aprueba
 ```
 
-Edita `.env` con tu configuración de n8n:
+### Los 3 Componentes
 
-```env
-N8N_WEBHOOK_URL=https://tu-n8n-instance.com/webhook/generate-media
-N8N_API_KEY=tu_api_key_aqui
+| Componente | Rol |
+|-----------|-----|
+| **Claude Code (Yo)** | Frontend + Orquestación. Tú me hablas, yo hago |
+| **n8n (Tu VPS)** | Backend. Genera imágenes, videos, audio, música |
+| **Obsidian** | Interfaz visual. Ves resultados y apruebas |
+
+## ⚡ Quick Start
+
+### 1. Configura n8n
+```
+Edita .env:
+N8N_WEBHOOK_URL=https://tu-n8n-vps.com/webhook/generate-media
+N8N_API_KEY=tu_api_key
 ```
 
-## Estructura del Proyecto
+### 2. Abre Obsidian
+```
+File → Open vault folder → Selecciona: tataraVideo/vault/
+```
+
+### 3. Crea Proyecto
+```
+Dime: "Crea un proyecto llamado 'Mi Video'"
+
+Yo creo:
+- vault/projects/mi-video/
+- media/mi-video/
+- Script.md + Direccion-Arte.md
+```
+
+### 4. Define los Shots
+```
+Dime: "Agrega 3 shots:
+       1. Escena 1 (5s)
+       2. Escena 2 (3s)
+       3. Escena 3 (2s)"
+
+Yo edito Script.md
+```
+
+### 5. Parsea
+```
+Dime: "Parsea los shots"
+
+Yo creo shot-01.md, shot-02.md, shot-03.md
+```
+
+### 6. Define Dirección de Arte
+```
+En Obsidian editas: Direccion-Arte.md
+- Estilo, mood, colores, referencias
+```
+
+### 7. Genera Media
+```
+Dime: "Genera first-frame para shot-01"
+
+Yo:
+- Construyo prompt inteligente
+- Envío a n8n
+- Guardo URL en shot-01.md
+
+Tú ves en Obsidian y apruebas ✅
+```
+
+### 8. Iterar
+```
+Dime: "Muy oscuro, más luz"
+
+Yo regenero con cambios
+```
+
+### 9. Export Final
+```
+Dime: "Export final"
+
+Todo listo en media/proyecto/final/ para editar
+```
+
+## 📂 Estructura
 
 ```
 tataraVideo/
-├── vault/                    # Obsidian vault
-│   ├── templates/           # Templates reutilizables
-│   └── projects/            # Proyectos de video
-├── src/                     # Código Node.js
-│   ├── cli/                # Scripts CLI
-│   ├── utils/              # Utilidades
-│   └── generators/         # Generadores
+├── vault/                   # Obsidian vault
+│   ├── projects/           # Tus proyectos
+│   │   └── mi-video/
+│   │       ├── Script.md
+│   │       ├── Direccion-Arte.md
+│   │       └── shot-XX.md
+│   └── templates/          # Templates (no tocar)
+│
 ├── media/                  # Media generada
-├── config/                 # Configuraciones
-└── README.md
+│   └── mi-video/
+│       ├── shots/
+│       │   └── shot-XX/
+│       └── final/
+│
+└── docs/                   # Documentación
 ```
 
-## Uso Rápido
+## 🔌 Integración n8n
 
-### 1. Crear Proyecto
-
-```bash
-npm run new-project "Mi Video Increíble"
-```
-
-Esto crea:
-- Carpeta del proyecto en `vault/projects/`
-- `Script.md` para documentar los shots
-- `Direccion-Arte.md` para la dirección visual
-- Carpeta de media en `media/`
-
-### 2. Editar Script
-
-Abre `vault/projects/[proyecto]/Script.md` y define tus shots:
-
-```markdown
-### Shot 01
-- **Duración:** 5
-- **Descripción:** Un astronauta flotando en el espacio
-
-### Shot 02
-- **Duración:** 3
-- **Descripción:** Vista panorámica de la galaxia
-```
-
-### 3. Parsear Script en Shots
-
-```bash
-npm run parse-script "mi-video-increible"
-```
-
-Genera archivos `shot-01.md`, `shot-02.md`, etc.
-
-### 4. Definir Dirección de Arte
-
-Abre Obsidian y edita `vault/projects/[proyecto]/Direccion-Arte.md`:
-- Paleta de colores
-- Estilo visual
-- Mood/Atmósfera
-- Referencias visuales
-
-### 5. Generar Media
-
-Genera imágenes (frames) para cada shot:
-
-```bash
-# First frame
-npm run generate "mi-video-increible" "shot-01" "first-frame" --dry-run
-
-# Last frame
-npm run generate "mi-video-increible" "shot-01" "last-frame"
-
-# Video
-npm run generate "mi-video-increible" "shot-01" "video"
-
-# Audio
-npm run generate "mi-video-increible" "shot-01" "audio"
-
-# Música
-npm run generate "mi-video-increible" "shot-01" "music"
-```
-
-### 6. Revisar y Aprobar en Obsidian
-
-Abre cada `shot-XX.md` en Obsidian:
-- Marca los checkboxes según aprobaciones
-- Agrega feedback si es necesario
-- Regenera si es necesario
-
-### 7. Exportar Final
-
-Todos los assets aprobados se guardan en `media/[proyecto]/final/`
-
-## Opciones de Comandos
-
-### new-project
-```bash
-npm run new-project "Nombre Proyecto" \
-  --description "Descripción del video" \
-  --minutes 10
-```
-
-### parse-script
-```bash
-npm run parse-script "nombre-proyecto"
-```
-
-### generate
-```bash
-npm run generate "proyecto" "shot-id" "tipo" [opciones]
-
-# Opciones:
-# --prompt "tu prompt personalizado"
-# --dry-run (solo muestra el prompt sin enviar)
-```
-
-## Workflow Completo
-
-```
-1. new-project "Video"
-   ↓
-2. Editar Script.md con shots numerados
-   ↓
-3. parse-script "video"
-   ↓
-4. Editar Direccion-Arte.md en Obsidian
-   ↓
-5. Generar first-frame de cada shot
-   ↓
-6. Revisar y aprobar en Obsidian
-   ↓
-7. Generar last-frame
-   ↓
-8. Revisar y aprobar
-   ↓
-9. Generar video
-   ↓
-10. Generar audio
-   ↓
-11. Generar música
-   ↓
-12. Revisar y aprobar
-   ↓
-13. Exportar final → listo para editar
-```
-
-## Integración n8n
-
-El sistema envía requests HTTP POST a tu webhook n8n con esta estructura:
-
+### Request HTTP
 ```json
+POST https://tu-n8n-vps.com/webhook/generate-media
+
 {
   "type": "image|video|audio|music",
-  "project": "nombre-proyecto",
+  "project": "mi-video",
   "shotId": "shot-01",
-  "prompt": "prompt generado...",
-  "artDirection": {
-    "style": "cinematico realista",
-    "mood": "epico",
-    "colors": "#1a2b3c, #ff6b35"
-  },
-  "params": {
-    "width": 1920,
-    "height": 1080,
-    "duration": 5,
-    "fps": 24
-  }
+  "prompt": "...",
+  "artDirection": { "style": "...", "mood": "...", "colors": [...] },
+  "params": { "width": 1920, "height": 1080, "duration": 5, "fps": 24 }
 }
 ```
 
-Tu webhook debe responder con:
-
+### Response esperado
 ```json
 {
   "success": true,
   "jobId": "abc123",
-  "status": "completed|processing|failed",
+  "status": "completed",
   "result": {
-    "url": "https://url-a-media.com/file"
+    "url": "https://storage.com/media.mp4"
   }
 }
 ```
 
-## Obsidian Setup
+## 🎯 Comandos Conversacionales
 
-1. Abre Obsidian y selecciona `vault/` como vault
-2. Los templates están en `vault/templates/`
-3. Los proyectos se crean en `vault/projects/`
-4. Usa los templates para documentar cada fase
+| Acción | Ejemplo |
+|--------|---------|
+| Crear proyecto | "Crea proyecto 'Mi Video'" |
+| Agregar shots | "Agrega estos shots: [detalles]" |
+| Parsear | "Parsea los shots" |
+| Generar media | "Genera first-frame para shot-01" |
+| Iterar | "Más luz, menos saturación" |
+| Export | "Export final" |
 
-### Templates Disponibles
+## 📋 Workflow Típico
 
-- `01-Script.md` - Script general del proyecto
-- `02-Direccion-Arte.md` - Dirección visual y referencias
-- `03-Shot.md` - Detalles de cada shot con checklists
-- `04-Prompt.md` - Documentar prompts específicos
-- `05-Feedback.md` - Registrar feedback e iteraciones
-
-## Troubleshooting
-
-### Error: "Script.md no encontrado"
-```bash
-# Asegúrate de haber creado el proyecto primero
-npm run new-project "nombre"
+```
+1. Crear proyecto
+   ↓
+2. Definir script (shots)
+   ↓
+3. Parsear shots
+   ↓
+4. Definir dirección de arte en Obsidian
+   ↓
+5. Generar first-frame de cada shot
+   ↓
+6. Aprobar en Obsidian ✅ o iterar ❌
+   ↓
+7. Generar last-frame
+   ↓
+8. Generar video, audio, música
+   ↓
+9. Aprobar y export final
+   ↓
+10. Editar en Adobe Premiere 🎬
 ```
 
-### Error: "No se encontraron shots en el script"
-```markdown
-# El formato debe ser exactamente:
-### Shot 01
-- **Duración:** 5
-- **Descripción:** Descripción del shot
+## 💻 Obsidian Setup
+
+### Abrir Vault
+1. Abre Obsidian
+2. Click en "Open vault folder"
+3. Selecciona carpeta `vault/`
+
+### Templates
+Los templates están en `vault/templates/`:
+- `01-Script.md` - Script general
+- `02-Direccion-Arte.md` - Dirección visual
+- `03-Shot.md` - Detalles de shot
+- `04-Prompt.md` - Documentar prompts (opcional)
+- `05-Feedback.md` - Feedback e iteraciones (opcional)
+
+### Estructura en Obsidian
+```
+projects/
+├── _example-project/          # Ejemplo (referencia)
+│   ├── Script.md
+│   ├── Direccion-Arte.md
+│   ├── shot-01.md
+│   ├── shot-02.md
+│   └── shot-03.md
+│
+└── tu-proyecto/               # Tu proyecto nuevo
+    ├── Script.md
+    ├── Direccion-Arte.md
+    └── shot-XX.md
 ```
 
-### Error al conectar con n8n
-- Verifica que `N8N_WEBHOOK_URL` sea correcto en `.env`
-- Comprueba que n8n está corriendo
-- Usa `--dry-run` para ver el prompt sin enviar
+## 🚀 Ejemplo Completo
 
-## Desarrollo
+### Proyecto: "Viaje Espacial"
 
-### Agregar nuevo tipo de generación
+**Paso 1: Crear**
+```
+"Crea proyecto 'Viaje Espacial'"
+→ ✅ Creado
+```
 
-1. Agregar método en `src/utils/prompt-builder.js`
-2. Agregar endpoint en `config/n8n.config.js`
-3. Actualizar `generate-media.js`
+**Paso 2: Shots**
+```
+"Agrega shots:
+ 1. Astronauta en cohete (5s)
+ 2. Vuelo por galaxia (4s)
+ 3. Aterrizaje en luna (3s)"
+→ ✅ Script actualizado
+```
 
-### Personalizar templates
+**Paso 3: Parsear**
+```
+"Parsea los shots"
+→ ✅ shot-01.md, shot-02.md, shot-03.md creados
+```
 
-Edita los archivos en `vault/templates/` - se usan en la creación de proyectos
+**Paso 4: Dirección de Arte**
+```
+En Obsidian editas:
+- Estilo: Cinematográfico épico
+- Mood: Asombro y contemplación
+- Colores: Azul profundo, naranja cálido
+- Referencias: [links visuales]
+```
 
-## Próximas Mejoras
+**Paso 5: Generar**
+```
+"Genera first-frame para shot-01"
+→ ✅ Imagen generada
+   📸 URL en Obsidian
 
-- [ ] Batch generation (múltiples shots en paralelo)
-- [ ] Retry logic y manejo de errores mejorado
-- [ ] Descarga automática de media desde n8n
-- [ ] Historial de versiones completo
-- [ ] Export a video editado
-- [ ] Integración con Adobe Premiere
+Tú ves en Obsidian y apruebas ✅
 
-## Licencia
+"Genera last-frame para shot-01"
+→ ✅ Generado
 
-MIT
+"Genera video, audio y música para shot-01"
+→ ✅ 3 archivos generados en paralelo
+```
 
-## Contribuciones
+**Paso 6: Repetir**
+```
+Repetir para shot-02 y shot-03
+```
 
-Las contribuciones son bienvenidas. Por favor abre un issue o pull request.
+**Paso 7: Export**
+```
+"Export final"
+→ ✅ Todo en media/viaje-espacial/final/
+   Listo para Adobe Premiere
+```
+
+## ⚙️ Configuración
+
+### .env
+```env
+# n8n Configuration
+N8N_WEBHOOK_URL=https://tu-n8n-vps.com/webhook/generate-media
+N8N_API_KEY=tu_api_key_aqui
+N8N_TIMEOUT=300000
+
+# Project Configuration
+PROJECT_BASE_DIR=./projects
+MEDIA_BASE_DIR=./media
+
+# Logging
+LOG_LEVEL=info
+```
+
+### Obsidian Settings
+- **Tema:** Dark mode
+- **Templates folder:** `templates/`
+- **Line numbers:** Habilitados
+- **Backlinks:** Habilitados
+
+## 🆘 Troubleshooting
+
+**P: No puedo conectar a n8n**
+R: Verifica que `N8N_WEBHOOK_URL` sea correcto en `.env`
+
+**P: Obsidian no muestra las imágenes**
+R: Verifica que los paths en shot-XX.md sean absolutos o relativos correctamente
+
+**P: Quiero cambiar un shot después de generar**
+R: Puedo regenerar todo lo que quieras. Solo dime qué cambiar.
+
+## 📚 Documentación
+
+- **CLAUDE.md** - Explicación completa del sistema
+- **vault/README.md** - Guía de Obsidian
+
+## 🎬 Resultado Final
+
+Cuando todo esté listo:
+
+```
+media/viaje-espacial/final/
+├── shot-01-video.mp4
+├── shot-01-audio.mp3
+├── shot-01-music.mp3
+├── shot-02-video.mp4
+├── shot-02-audio.mp3
+├── shot-02-music.mp3
+├── shot-03-video.mp4
+├── shot-03-audio.mp3
+└── shot-03-music.mp3
+```
+
+Importas a Adobe Premiere y editas. **¡Listo!**
+
+## 💡 Ventajas
+
+✅ Conversacional - Me hablas naturalmente
+✅ Sin instalación - No hay scripts locales
+✅ Flexible - Cambias de opinión fácilmente
+✅ Rápido - Generación paralela
+✅ Visual - Todo en Obsidian
+✅ Iterable - Regeneras sin límite
+
+## 📞 ¿Lista?
+
+Lee **CLAUDE.md** para entender completamente cómo funciona.
+
+Luego configura `.env` con tu n8n y dime:
+
+```
+"Crea proyecto 'Mi Video'"
+```
+
+**Y empezamos a generar magia 🎬**
 
 ---
 

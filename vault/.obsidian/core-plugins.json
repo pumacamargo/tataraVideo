@@ -1,0 +1,17 @@
+{
+  "daily-notes": true,
+  "global-search": true,
+  "switcher": true,
+  "graph": true,
+  "backlink": true,
+  "outgoing-link": true,
+  "tag-pane": true,
+  "page-preview": true,
+  "note-composer": true,
+  "command-palette": true,
+  "markdown-importer": false,
+  "word-count": true,
+  "file-recovery": true,
+  "save-query": false,
+  "sync": false
+}

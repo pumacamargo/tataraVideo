@@ -2,480 +2,290 @@
 
 ## 🎯 Visión General
 
-Este es un **sistema de producción de videos AI profesional** que integra:
-- **Claude Code CLI** (tú, interactuando conmigo)
-- **n8n** (servidor que genera imágenes, videos, audio, música)
-- **Obsidian** (donde revisas y apruebas cada elemento)
-- **Node.js scripts** (automatización y orquestación)
+Este es un **sistema de producción de videos AI profesional** simplificado:
 
-El objetivo es crear un **flujo ágil y profesional** donde:
-1. Defines qué quieres (script + dirección de arte)
-2. Yo genero los prompts inteligentemente
-3. n8n genera la media en paralelo
-4. Tú apruebas o pides cambios en Obsidian
-5. Iteramos hasta perfeccionar
-6. Exportas todo listo para editar
+- **Claude Code (Yo)** = Frontend + Orquestación
+  - Tú me das instrucciones conversacionalmente
+  - Yo manejo archivos, construyo prompts, coordino todo
+
+- **n8n (Tu VPS)** = Backend generativo
+  - Recibe requests HTTP
+  - Genera imágenes, videos, audio, música
+  - Devuelve URLs
+
+- **Obsidian** = Interfaz visual + Aprobaciones
+  - Ves los resultados generados
+  - Apruebas o rechazas
+  - Das feedback
+
+**NO hay scripts locales.** Todo funciona conversacionalmente entre tú y yo.
 
 ---
 
-## 🔄 Flujo Completo (De Principio a Fin)
+## 🔄 Flujo Completo
 
-### Fase 1: Setup del Proyecto
+### Fase 1: Crear Proyecto
+
 ```
-Usuario: "Crea un proyecto nuevo"
-         ↓
-yo ejecuto: npm run new-project "Nombre"
-         ↓
-Se crean:
-  - vault/projects/nombre/
-  - media/nombre/
-  - Script.md
-  - Direccion-Arte.md
-```
+Tú: "Crea un proyecto llamado 'Space Adventure'"
 
-### Fase 2: Definición del Script
-```
-Usuario: Edita Script.md (define los shots)
+Yo:
+  1. Creo carpeta: vault/projects/space-adventure/
+  2. Creo carpeta: media/space-adventure/
+  3. Creo archivo: Script.md
+  4. Creo archivo: Direccion-Arte.md
+  5. Creo archivo: project.json (metadata)
 
-Script.md:
-# Mi Video
-### Shot 01
-- Duración: 5
-- Descripción: Un astronauta flotando en el espacio
-
-### Shot 02
-- Duración: 3
-- Descripción: Vista de la galaxia
+Output: "✅ Proyecto creado. Puedes editar Script.md"
 ```
 
-### Fase 3: Parsear Script
-```
-Usuario: "Parsea los shots"
-         ↓
-yo ejecuto: npm run parse-script "nombre"
-         ↓
-Se crean:
-  - shot-01.md
-  - shot-02.md
-  - etc.
+### Fase 2: Definir Script
 
-Cada shot tiene checkboxes para:
-  □ First frame
-  □ Last frame
-  □ Video
-  □ Audio
-  □ Música
+```
+Tú: "Agrega estos shots al Script.md:
+     Shot 1: Astronauta en la cápsula (5s)
+     Shot 2: Viaje galáctico (3s)
+     Shot 3: Aterrizaje en luna (2s)"
+
+Yo:
+  - Edito vault/projects/space-adventure/Script.md
+  - Formateo con estructura correcta:
+    ### Shot 01
+    - Duración: 5
+    - Descripción: Astronauta en la cápsula
+
+Output: "✅ Script actualizado con 3 shots"
+```
+
+### Fase 3: Parsear Shots
+
+```
+Tú: "Parsea los shots"
+
+Yo:
+  1. Leo Script.md
+  2. Extraigo: ### Shot 01, ### Shot 02, etc.
+  3. Por cada shot, creo un archivo:
+     - shot-01.md (con checkboxes, template, etc.)
+     - shot-02.md
+     - shot-03.md
+  4. Creo carpetas en media/space-adventure/shots/
+  5. Actualizo project.json
+
+Output: "✅ 3 shots creados. Están listos en Obsidian"
 ```
 
 ### Fase 4: Dirección de Arte
+
 ```
-Usuario: Edita Direccion-Arte.md en Obsidian
-
-Define:
-- Paleta de colores
-- Estilo visual
-- Mood/atmósfera
-- Referencias visuales
-```
-
-### Fase 5: Generar Media (El Corazón del Sistema)
-```
-Usuario: "Genera first-frame para shot-01"
-         ↓
-yo:
-  1. Leo shot-01.md (enunciado, duración)
-  2. Leo Direccion-Arte.md (estilo, mood, colores)
-  3. Construyo prompt inteligente combinando todo
-  4. Envío a n8n vía HTTP
-  5. n8n genera imagen
-  6. Guardo URL en shot-01.md
-         ↓
-Obsidian muestra:
-  [x] First frame generado
-
-  Archivo: first-frame.png
-  Status: Pendiente de aprobación
-```
-
-### Fase 6: Revisión y Aprobación en Obsidian
-```
-Usuario: Abre Obsidian → shot-01.md
-
-VE:
-- Imagen del first-frame
-- Checkbox para aprobar
-- Campo de feedback
-
-ACCIONES:
-  ☑ Aprobado! → checkbox a ✅
-  O
-  ☐ Necesita cambios → agrega feedback
-```
-
-### Fase 7: Iterar si es Necesario
-```
-Usuario: "Last frame necesita cambios, más épico"
-         ↓
-Usuario: Edita el prompt en shot-01.md
-         ↓
-Usuario: "Regenera last-frame"
-         ↓
-yo: Tomo el nuevo prompt y envío a n8n
-         ↓
-Se actualiza el archivo
-```
-
-### Fase 8: Generar Video, Audio, Música (En Paralelo)
-```
-Usuario: "Genera video, audio y música para shot-01"
-         ↓
-yo: Envío 3 requests en paralelo a n8n
-         ↓
-Mientras se generan:
-  - Video (5-30 seg)
-  - Audio (narración)
-  - Música (fondo)
-         ↓
-Se guardan todas las URLs
-         ↓
-Obsidian actualiza mostrando todas
-```
-
-### Fase 9: Repetir para Todos los Shots
-```
-Haces esto para cada shot:
-  shot-01 ✅ (completo)
-  shot-02 🔄 (generando)
-  shot-03 ⏳ (pendiente)
-  etc.
-```
-
-### Fase 10: Export Final
-```
-Usuario: "Export final"
-         ↓
-yo: Copia todos los assets a media/nombre/final/
-         ↓
-Tienes todo organizado para editar en:
-  - Adobe Premiere
-  - DaVinci
-  - Final Cut Pro
-  - etc.
-```
-
----
-
-## 🛠️ Cómo Funciona Cada Componente
-
-### 1. Node.js Scripts (Automatización)
-
-**new-project.js**
-```
-Crea la estructura para un nuevo proyecto
-npm run new-project "Mi Video"
-→ Crea carpetas + templates
-```
-
-**parse-script.js**
-```
-Lee Script.md y crea un archivo .md por cada shot
-npm run parse-script "mi-video"
-→ Extrae "### Shot 01", "### Shot 02", etc.
-→ Crea shot-01.md, shot-02.md, etc.
-```
-
-**generate-media.js**
-```
-Toma un enunciado + dirección de arte
-Construye el prompt perfecto
-Lo envía a n8n
-npm run generate "proyecto" "shot-01" "first-frame"
-→ Construye prompt
-→ Envía a n8n
-→ Guarda resultado
-```
-
-### 2. Prompt Builder (El Cerebro)
-
-Cuando ejecutas `generate`, internamente:
-
-```javascript
-// 1. Leo el shot
-enunciado = "Un astronauta flotando en el espacio"
-duracion = "5"
-
-// 2. Leo la dirección de arte
-estilo = "Cinematográfico realista"
-mood = "Épico y contemplativo"
-colores = ["#1a2b3c", "#ff6b35"]
-
-// 3. Construyo el prompt combinando TODO:
-prompt = `
-Genera una imagen de ultra alta calidad:
-
-Descripción: Un astronauta flotando en el espacio
-
-Estilo: Cinematográfico realista
-Atmósfera: Épico y contemplativo
-Paleta: Azul oscuro, naranja cálido
-
-Técnico:
-- 1920x1080
-- Ultra HD
-- Composición profesional
-- Iluminación artística
-- Sin watermark
-`
-
-// 4. Lo envío a n8n
-```
-
-**Por qué esto es poderoso:**
-- Los prompts son **contextuales** (saben sobre el proyecto)
-- Son **consistentes** (mismo estilo para todos los shots)
-- Son **profesionales** (tienen parámetros técnicos)
-- Son **iterables** (puedo modificarlos basado en feedback)
-
-### 3. Cliente n8n (La Conexión)
-
-```javascript
-// Envía requests HTTP a tu webhook n8n
-POST https://tu-n8n.com/webhook/generate-media
-
-Body:
-{
-  type: "image",
-  project: "mi-video",
-  shotId: "shot-01",
-  prompt: "...",
-  artDirection: { style, mood, colors },
-  params: { width: 1920, height: 1080, ... }
-}
-
-Response:
-{
-  success: true,
-  jobId: "abc123",
-  status: "completed",
-  result: { url: "https://..." }
-}
-```
-
-### 4. Obsidian (La Interfaz de Control)
-
-**¿Por qué Obsidian?**
-- ✅ Ver imágenes inline (preview de media)
-- ✅ Checklists para aprobaciones
-- ✅ Notas de feedback
-- ✅ Links entre shots
-- ✅ Búsqueda poderosa
-- ✅ Sin dependencias externas
-
-**Estructura en Obsidian:**
-```
-vault/
-├── projects/
-│   └── mi-video/
-│       ├── Script.md (masterfile)
-│       ├── Direccion-Arte.md (referencia visual)
-│       ├── shot-01.md (AQUÍ VES LAS IMÁGENES)
-│       │   ├── first-frame.png ✅
-│       │   ├── last-frame.png ⏳
-│       │   ├── video.mp4 ⏳
-│       │   └── [checklists + feedback]
-│       ├── shot-02.md
-│       └── ...
-```
-
-**En Obsidian ves algo así:**
-
-```markdown
-# Shot 01
-
-## Componentes
-- [x] First frame aprobado ✅
-  Archivo: [[first-frame.png]]
-  Feedback: Perfecto, épico
-
-- [ ] Last frame generado ⏳
-  Archivo: [[last-frame.png]]
-  Feedback: Muy oscuro, más luz
-  Nuevo prompt: "...cambios aquí..."
-
-- [ ] Video aprobado
-  ...
-```
-
-**¿Cómo fluye?**
-1. Yo genero media
-2. Guardo URLs en los archivos .md
-3. Tú ves las imágenes en Obsidian
-4. Pones checkboxes
-5. Escribes feedback
-6. Me lo comunicas
-7. Regenero con los cambios
-
----
-
-## 📋 Workflow Típico (Paso a Paso)
-
-### Ejemplo: Video de 3 Shots, 30 segundos total
-
-**Día 1: Setup**
-```
-Tú: "Crea proyecto 'Space Adventure'"
+Tú: "Edita Direccion-Arte.md con:
+     - Estilo: Cinematográfico realista
+     - Mood: Épico
+     - Colores: Azul, naranja, purpura"
 
 Yo:
-  npm run new-project "Space Adventure"
-  → Se crea toda la estructura
+  - Edito vault/projects/space-adventure/Direccion-Arte.md
+  - Agrego paleta, referencias, notas técnicas
 
-Tú: Edita Script.md
-### Shot 01 - Intro
-- Duración: 10
-- Descripción: Astronauta en cápsula, mirando el espacio
-
-### Shot 02 - Space
-- Duración: 12
-- Descripción: Viaje a través de la galaxia
-
-### Shot 03 - Landing
-- Duración: 8
-- Descripción: Aterrizaje en planeta
-
-Yo: npm run parse-script "space-adventure"
-→ Crea shot-01.md, shot-02.md, shot-03.md
-
-Tú: Edita Direccion-Arte.md en Obsidian
-- Estilo: Cinematográfico futurista
-- Mood: Épico y aventurero
-- Colores: Azul, morado, naranja
-- Referencias: Interstellar, 2001: Space Odyssey
+Output: "✅ Dirección de arte definida"
 ```
 
-**Día 2: Generar Frames**
+### Fase 5: Generar Media
+
 ```
 Tú: "Genera first-frame para shot-01"
 
 Yo:
-  1. Leo: "Astronauta en cápsula mirando espacio" (10s)
-  2. Leo: "Cinematográfico futurista, épico, azul-morado"
-  3. Construyo prompt profesional
-  4. Envío a n8n
-  5. Guardo imagen en media/space-adventure/shots/shot-01/
+  1. Leo shot-01.md → "Astronauta en cápsula (5s)"
+  2. Leo Direccion-Arte.md → "Cinematográfico, épico, azul"
+  3. Construyo prompt profesional combinando TODO
+  4. Hago POST request a n8n:
+     {
+       type: "image",
+       project: "space-adventure",
+       shotId: "shot-01",
+       prompt: "...[prompt construido]",
+       artDirection: { style, mood, colors }
+     }
+  5. Espero respuesta de n8n con URL
+  6. Edito shot-01.md con:
+     - Link a la imagen
+     - Status: "Generado, pendiente aprobación"
 
-Tú: Ves en Obsidian → shot-01.md
-    [Ve la imagen previsuada]
-    Feedback: "Perfecto ✅"
-
-Tú: "Genera last-frame para shot-01"
-Yo: [Mismo proceso]
-
-Tú: "Genera first-frame para shot-02"
-Yo: [Mismo proceso]
-... (repites para todos)
+Output: "✅ Image generada y guardada"
+       "📸 URL: https://storage.com/..."
+       "👉 Revisa en Obsidian y aprueba"
 ```
 
-**Día 3: Generación de Video, Audio, Música**
+### Fase 6: Revisar y Aprobar en Obsidian
+
 ```
-Tú: "Genera todo para shot-01: video, audio, música"
+Tú: Abres Obsidian
+    vault/projects/space-adventure/shot-01.md
 
-Yo: [Envío 3 requests a n8n en paralelo]
-    Video: 10 segundos
-    Audio: "Narración del astronauta..."
-    Música: "Tema épico futurista"
+VES:
+  - Imagen previsuada
+  - [ ] First frame aprobado
+  - Campo para feedback
 
-Mientras se generan (5-30 min):
-    Yo actualizo shot-01.md con links
-
-Tú: Ves en Obsidian todo listo
-    [x] Video ✅
-    [x] Audio ✅
-    [x] Música ✅
-
-    Feedback: "Todo perfecto!"
-
-Tú: "Repite para shot-02 y shot-03"
-Yo: [Mismo proceso]
+ACCIONES:
+  ✅ "Perfecto, aprobado" → marcar checkbox
+  ❌ "Muy oscuro, más luz" → escribir feedback
 ```
 
-**Día 4: Revisión Final e Iteraciones**
+### Fase 7: Iterar si es Necesario
+
 ```
-Tú: Revisa todo en Obsidian
+Tú: "First frame muy oscuro, regenera con más luz"
 
-Feedback:
-  shot-01: Perfecto ✅
-  shot-02: Video muy lento, más dinámico ⚠️
-  shot-03: Perfecto ✅
+Yo:
+  1. Leo shot-01.md y veo tu feedback
+  2. Edito el prompt:
+     Agrego: "Iluminación más brillante, más tonos cálidos"
+  3. Envío request a n8n con prompt actualizado
+  4. Guardo nueva URL en shot-01.md
 
-Tú: "shot-02 necesita ser más dinámico"
-
-Yo: Edito el prompt en shot-02.md
-    "...añadir movimiento de cámara rápido..."
-
-Yo: npm run generate "space-adventure" "shot-02" "video"
-    → Regenera el video
-
-Tú: Ves versión nueva en Obsidian
-    Feedback: "Mucho mejor ✅"
+Output: "✅ Regenerado. Nueva versión en Obsidian"
 ```
 
-**Día 5: Export Final**
+### Fase 8: Generar Video, Audio, Música (En Paralelo)
+
+```
+Tú: "Genera video, audio y música para shot-01"
+
+Yo: Envío 3 requests simultáneamente a n8n
+    - Video (5 segundos)
+    - Audio (narración)
+    - Música (fondo)
+
+Mientras se generan:
+  - Yo actualizo shot-01.md con status
+  - Tú ves en Obsidian: "Generando..."
+
+Output: "✅ Todo completado
+         📽️  Video: https://...
+         🎙️  Audio: https://...
+         🎵 Música: https://..."
+```
+
+### Fase 9: Repetir para Todos los Shots
+
+```
+Repetir Fases 5-8 para shot-02, shot-03, etc.
+
+Tracking en Obsidian:
+  shot-01: ✅✅✅✅✅ (todos aprobados)
+  shot-02: ✅✅⏳⏳⏳ (generando audio/música)
+  shot-03: ⏳⏳⏳⏳⏳ (sin generar)
+```
+
+### Fase 10: Export Final
+
 ```
 Tú: "Export final"
 
-Yo: Copia todos los assets a media/space-adventure/final/
-    Estructura:
-    final/
-    ├── shot-01/
-    │   ├── video.mp4
-    │   ├── audio.mp3
-    │   └── music.mp3
-    ├── shot-02/
-    │   ├── video.mp4
-    │   ├── audio.mp3
-    │   └── music.mp3
-    └── shot-03/
-        ├── video.mp4
-        ├── audio.mp3
-        └── music.mp3
+Yo:
+  1. Copia todos los assets a media/space-adventure/final/
+  2. Organizo por shot
+  3. Creo manifest.json con metadata
 
-Tú: Importas a Adobe Premiere y editas 🎬
+Output: "✅ Todo listo en media/space-adventure/final/
+         📦 Estructura:
+            final/shot-01/video.mp4, audio.mp3, music.mp3
+            final/shot-02/...
+            final/shot-03/..."
+
+Tú: Descargas y editas en Adobe Premiere 🎬
 ```
 
 ---
 
-## 🔌 Integración con n8n (Tu VPS)
+## 🛠️ Cómo Funciono
 
-### Lo que Tienes que Configurar en n8n
+### Creación de Proyecto
 
-**Necesitas un webhook que reciba:**
+**Conversación:**
+```
+Tú: "Crea proyecto 'Mi Video'"
+Yo: ✅ Creado
 
+Tú: "Agrega 2 shots:
+     1. Persona corriendo en playa
+     2. Puesta de sol"
+Yo: ✅ Script actualizado
+```
+
+**Detrás de escenas:**
+- Creo `vault/projects/mi-video/`
+- Creo `Script.md` con estructura
+- Creo `Direccion-Arte.md` vacío
+- Creo `media/mi-video/` con subcarpetas
+- Creo `project.json` con metadata
+
+### Construcción de Prompts
+
+**Dato:** Yo combino inteligentemente:
+```javascript
+prompt = baseDescription
+         + artDirection (estilo, mood, colores)
+         + technicalParams (resolución, duración, fps)
+         + contextFromProject
+```
+
+**Ejemplo:**
+```
+Input: "Shot-01, first-frame, cinematográfico"
+       Dirección: "Épico, azul/naranja, realista"
+
+Output:
+"Genera una imagen de ultra alta calidad:
+
+Descripción: Persona corriendo en playa
+
+Estilo: Cinematográfico realista
+Atmósfera: Épico
+Paleta: Azul océano, arena naranja
+
+Técnico:
+- 1920x1080 Ultra HD
+- Composición cinematográfica
+- Iluminación de 3 puntos
+- Sin watermark"
+```
+
+### Comunicación con n8n
+
+**Estructura de request:**
 ```json
+POST https://tu-n8n-vps.com/webhook/generate-media
+
 {
-  "type": "image" | "video" | "audio" | "music",
+  "type": "image|video|audio|music",
   "project": "space-adventure",
   "shotId": "shot-01",
-  "prompt": "...",
-  "artDirection": { "style": "...", "mood": "...", "colors": [...] },
-  "params": { "width": 1920, "height": 1080, "duration": 5, "fps": 24 }
+  "prompt": "...[prompt generado]",
+  "artDirection": {
+    "style": "Cinematográfico",
+    "mood": "Épico",
+    "colors": ["#0a1428", "#ff6b35"]
+  },
+  "params": {
+    "width": 1920,
+    "height": 1080,
+    "duration": 5,
+    "fps": 24
+  }
 }
 ```
 
-**El webhook debe:**
-
-1. **Recibir** el request
-2. **Validar** que el prompt sea válido
-3. **Llamar** al servicio de generación (Flux, DALL-E, etc.)
-4. **Esperar** o guardar job ID
-5. **Responder** con:
-
+**Response esperado:**
 ```json
 {
   "success": true,
-  "jobId": "abc123",
-  "status": "completed" | "processing" | "failed",
+  "jobId": "abc123xyz",
+  "status": "completed",
   "result": {
-    "url": "https://storage.com/media.png",
+    "url": "https://storage.com/media.mp4",
     "metadata": {
       "model": "flux",
       "duration": "5s"
@@ -484,290 +294,278 @@ Tú: Importas a Adobe Premiere y editas 🎬
 }
 ```
 
-### Flujo en n8n (Conceptual)
+### Gestión de Archivos
 
+**Estructura que mantengo:**
 ```
-n8n Webhook
-    ↓
-    ├→ Extract: type, project, shotId, prompt
-    ├→ Validate: prompt no vacío
-    ├→ Switch: por tipo
-    │   ├→ "image": Call API (DALL-E/Flux)
-    │   ├→ "video": Call API (Runway/Gen-2)
-    │   ├→ "audio": Call API (Elevenlabs/TTS)
-    │   └→ "music": Call API (Mubert/MusicGen)
-    ├→ Wait: por resultado
-    ├→ Upload: a almacenamiento
-    └→ Respond: con URL
-```
-
-### Variables de Entorno
-
-Edita `.env`:
-```env
-N8N_WEBHOOK_URL=https://tu-n8n-vps.com/webhook/generate-media
-N8N_API_KEY=tu_api_key_secret
-N8N_TIMEOUT=300000  # 5 minutos
+tataraVideo/
+├── vault/
+│   ├── projects/
+│   │   └── space-adventure/
+│   │       ├── project.json (metadata)
+│   │       ├── Script.md
+│   │       ├── Direccion-Arte.md
+│   │       ├── shot-01.md
+│   │       ├── shot-02.md
+│   │       └── shot-03.md
+│   └── templates/ (no se modifica)
+│
+└── media/
+    └── space-adventure/
+        ├── shots/
+        │   ├── shot-01/ (video.mp4, audio.mp3, music.mp3)
+        │   ├── shot-02/
+        │   └── shot-03/
+        └── final/ (export)
 ```
 
 ---
 
-## 📊 Estructura de Datos
+## 📋 Comandos Conversacionales
 
-### Project Metadata (project.json)
+### Crear Proyecto
+```
+"Crea un proyecto llamado 'Nombre del Video'"
+→ Yo creo estructura + archivos base
+```
+
+### Editar Script
+```
+"Agrega estos shots al script:
+ 1. Descripción shot 1 (duración)
+ 2. Descripción shot 2 (duración)"
+→ Yo edito Script.md
+```
+
+### Parsear
+```
+"Parsea los shots"
+→ Yo creo shot-01.md, shot-02.md, etc.
+```
+
+### Editar Dirección de Arte
+```
+"Dirección de arte:
+ - Estilo: Cinematográfico
+ - Mood: Épico
+ - Colores: azul, naranja
+ - Referencias: [links]"
+→ Yo edito Direccion-Arte.md
+```
+
+### Generar Media
+```
+"Genera first-frame para shot-01"
+→ Yo construyo prompt + envío a n8n
+
+"Genera video para shot-01"
+→ Mismo proceso
+
+"Genera video, audio y música para shot-01"
+→ 3 requests simultáneamente
+```
+
+### Iterar
+```
+"Shot-01 first-frame muy oscuro, más luz"
+→ Yo modifico prompt + regenero
+
+"Cambia dirección de arte a más vibrante"
+→ Yo actualizo + regenero afectados
+```
+
+### Export
+```
+"Export final"
+→ Yo copies assets a media/proyecto/final/
+```
+
+---
+
+## 🔄 Workflow Típico (Ejemplo Real)
+
+### Día 1
+```
+Tú: "Quiero hacer un video corto sobre astronautas"
+
+Yo: "¿Cuántos shots? ¿Cuál es la dirección visual?"
+
+Tú: "3 shots, cinematográfico épico, azul y naranja"
+
+Yo: "Perfecto. Creo el proyecto 'Astronautas'"
+    ✅ Proyecto creado
+
+Tú: "Agrega los shots:
+     1. Astronauta en cápsula (5s)
+     2. Viaje espacial (4s)
+     3. Aterrizaje (3s)"
+
+Yo: ✅ Script actualizado
+
+Tú: "Parsea"
+
+Yo: ✅ 3 shots creados en Obsidian
+```
+
+### Día 2
+```
+Tú: Abro Obsidian, edito Direccion-Arte.md
+    - Agrego colores exactos
+    - Agrego referencias visuales
+
+Tú: "Genera first-frame para shot-01"
+
+Yo: ✅ Generado, puedes ver en Obsidian
+    [Muestra URL y status]
+
+Tú: Ves imagen en Obsidian, apruebas ✅
+    O das feedback ❌
+
+Tú: "Genera last-frame para shot-01"
+
+Yo: ✅ Generado
+
+Tú: Apruebas en Obsidian ✅
+
+Tú: "Genera video para shot-01"
+
+Yo: ✅ Video generado, puedes previewear
+```
+
+### Día 3
+```
+Repetir para shot-02 y shot-03
+
+Tú: Después de aprobar TODO:
+    "Export final"
+
+Yo: ✅ Todo en media/astronautas/final/
+    Listo para editar en Adobe Premiere
+```
+
+---
+
+## 📊 Estructura de Archivos
+
+### project.json (Metadata)
 ```json
 {
   "name": "space-adventure",
   "createdAt": "2025-01-09T12:00:00Z",
   "status": "in-progress",
-  "shots": [
-    "shot-01",
-    "shot-02",
-    "shot-03"
-  ],
-  "description": "...",
-  "durationMinutes": 2
+  "shots": ["shot-01", "shot-02", "shot-03"],
+  "description": "Video sobre astronautas",
+  "artDirection": {
+    "style": "Cinematográfico",
+    "mood": "Épico",
+    "colors": ["#0a1428", "#ff6b35"]
+  }
 }
 ```
 
-### Shot File (shot-01.md)
+### shot-XX.md (Template actualizado)
 ```markdown
 # Shot 01
+
+## Info
 - ID: shot-01
-- Duración: 10s
-- Enunciado: Astronauta en cápsula
+- Duración: 5s
+- Descripción: Astronauta en cápsula
 
 ## Aprobaciones
-- [x] First frame → media/shot-01/first-frame.png
-- [x] Last frame → media/shot-01/last-frame.png
-- [ ] Video → generando...
+- [ ] First frame
+  Status: Generado
+  URL: [link]
+  Aprobado: [checkbox]
+  Feedback: "..."
+
+- [ ] Last frame
+- [ ] Video
 - [ ] Audio
 - [ ] Música
 
-## Feedback
-"Necesita más luz en los ojos del astronauta"
-```
-
-### Media Organization
-```
-media/
-└── space-adventure/
-    ├── art-direction/
-    │   └── references/
-    ├── shots/
-    │   ├── shot-01/
-    │   │   ├── first-frame.png
-    │   │   ├── last-frame.png
-    │   │   ├── video.mp4
-    │   │   ├── audio.mp3
-    │   │   └── music.mp3
-    │   ├── shot-02/
-    │   └── shot-03/
-    └── final/
-        ├── shot-01-all-files/
-        ├── shot-02-all-files/
-        └── shot-03-all-files/
+## Historial
+v1: First frame generado
+v2: Regenerado (más luz)
 ```
 
 ---
 
-## 🚀 Comandos Disponibles
+## ✅ Flujo de Aprobación
 
-### Crear Proyecto
-```bash
-npm run new-project "Nombre Proyecto"
-# Opciones:
-#   --description "Descripción"
-#   --minutes 5
-
-# Crea:
-# - vault/projects/nombre-proyecto/
-# - media/nombre-proyecto/
-# - Script.md + Direccion-Arte.md
 ```
-
-### Parsear Script
-```bash
-npm run parse-script "nombre-proyecto"
-
-# Lee: vault/projects/nombre-proyecto/Script.md
-# Busca: ### Shot 01, ### Shot 02, etc.
-# Crea: shot-01.md, shot-02.md, etc.
-```
-
-### Generar Media
-```bash
-npm run generate "proyecto" "shot-id" "tipo" [opciones]
-
-# Tipo: first-frame | last-frame | video | audio | music
-
-# Opciones:
-#   --prompt "Tu prompt personalizado"
-#   --dry-run (solo muestra prompt sin enviar)
-
-# Ejemplos:
-npm run generate "space-adventure" "shot-01" "first-frame"
-npm run generate "space-adventure" "shot-01" "video" --dry-run
-npm run generate "space-adventure" "shot-02" "audio" --prompt "Voz epica, grave"
+Generar → Obsidian Preview → ✅ Aprobado ✅
+                            ↓
+                        ❌ Feedback
+                            ↓
+                        Yo regenero
+                            ↓
+                        Obsidian Preview
+                            ↓
+                        ✅ Aprobado ✅
 ```
 
 ---
 
-## 🔄 Iteración y Feedback
+## 🔌 Configuración n8n
 
-### Flujo de Cambios
+**Lo que tienes que hacer:**
 
-**Caso 1: Regenerar Por Cambios**
-```
-Tú: "shot-01 last-frame necesita ser más oscuro"
+1. Crear webhook en n8n que reciba:
+   ```json
+   POST /webhook/generate-media
 
-Yo: [Edito el prompt en shot-01.md]
-    "...añadir más oscuridad, iluminación dramática..."
+   {
+     "type": "image|video|audio|music",
+     "prompt": "...",
+     "params": { width, height, duration, fps },
+     ...
+   }
+   ```
 
-Yo: npm run generate "space" "shot-01" "last-frame"
+2. Procesar según tipo:
+   - `image` → Llamar DALL-E, Flux, Midjourney
+   - `video` → Llamar Runway, Gen-2, etc.
+   - `audio` → Llamar Elevenlabs, TTS
+   - `music` → Llamar Mubert, MusicGen
 
-Tú: Ves nueva versión en Obsidian
-```
+3. Responder con:
+   ```json
+   {
+     "success": true,
+     "jobId": "id",
+     "status": "completed",
+     "result": { "url": "https://..." }
+   }
+   ```
 
-**Caso 2: Cambiar Dirección de Arte Global**
-```
-Tú: "Quiero que todos los shots sean más vibrantes"
-
-Yo: [Edito Direccion-Arte.md]
-    Paleta: Colores más saturados
-
-Yo: [Regenero todos los shots afectados]
-    npm run generate "space" "shot-01" "first-frame"
-    npm run generate "space" "shot-02" "first-frame"
-    ...
-```
-
-**Caso 3: Cambiar Enunciado**
-```
-Tú: "El astronauta debería estar usando jetpack"
-
-Yo: [Edito shot-01.md]
-    "Astronauta volando con jetpack en el espacio"
-
-Yo: npm run generate "space" "shot-01" "first-frame"
-    npm run generate "space" "shot-01" "video"
-```
+4. Actualizar `.env`:
+   ```env
+   N8N_WEBHOOK_URL=https://tu-n8n-vps.com/webhook/generate-media
+   N8N_API_KEY=tu_api_key
+   ```
 
 ---
 
-## ✅ Workflow Completo de Aprobación
+## 💡 Ventajas de Este Flujo
 
-```
-┌─────────────────────────────────────────────┐
-│ CREACIÓN DE PROYECTO                        │
-└────────────┬────────────────────────────────┘
-             ↓
-┌─────────────────────────────────────────────┐
-│ DEFINIR SCRIPT (shots numerados)            │
-└────────────┬────────────────────────────────┘
-             ↓
-┌─────────────────────────────────────────────┐
-│ PARSEAR SCRIPT → shot-XX.md                 │
-└────────────┬────────────────────────────────┘
-             ↓
-┌─────────────────────────────────────────────┐
-│ DEFINIR DIRECCIÓN DE ARTE                   │
-└────────────┬────────────────────────────────┘
-             ↓
-        ┌────┴────┐
-        ↓         ↓
-    ╔═══════╗  ╔═══════╗
-    ║ LOOP  ║  ║ PARA  ║
-    ║ CADA  ║  ║ CADA  ║
-    ║ SHOT  ║  ║ SHOT  ║
-    ╚═══╤═══╝  ╚═══════╝
-        ↓
-┌─────────────────────────────────────────────┐
-│ GENERAR FIRST-FRAME                         │
-└────────────┬────────────────────────────────┘
-             ↓
-        ┌────────────────┐
-        ↓                ↓
-    [Aprobado]      [Rechazado]
-        │                │
-        ↓                ↓
-       ✅         [Editar prompt]
-               ↓
-        [Regenerar]
-            ↓
-         [Repetir]
-
-(Mismo para last-frame, video, audio, música)
-             ↓
-┌─────────────────────────────────────────────┐
-│ TODOS LOS SHOTS APROBADOS                   │
-└────────────┬────────────────────────────────┘
-             ↓
-┌─────────────────────────────────────────────┐
-│ EXPORT FINAL                                │
-│ media/proyecto/final/ LISTO PARA EDITAR     │
-└─────────────────────────────────────────────┘
-```
+✅ **Sin instalación local** - No hay scripts que instalar
+✅ **Conversacional** - Me hablas en lenguaje natural
+✅ **Flexible** - Cambias de opinión fácilmente
+✅ **Rápido** - Generación en paralelo
+✅ **Visual** - Revisas todo en Obsidian
+✅ **Iterable** - Regeneras sin perder historial
 
 ---
 
-## 💡 Consejos y Mejores Prácticas
+## 🚀 Empezamos?
 
-1. **Dirección de Arte Clara**: Cuanto mejor la definas, mejores los prompts
-2. **Prompts Específicos**: "Cinematográfico realista" es mejor que "bonito"
-3. **Iteración Rápida**: Regenera rapidamente si algo no te gusta
-4. **Aprovechar Obsidian**: Los checklists son tu amigo para tracking
-5. **Batch Generation**: Genera múltiples shots en paralelo para ahorrar tiempo
+Cuando estés listo:
 
----
+1. Configura `.env` con tu n8n
+2. Tienes lista la estructura de carpetas
+3. Templates de Obsidian listos
+4. Me dices: "Crea proyecto [nombre]"
 
-## 🎬 Próximas Fases (Post-MVP)
-
-- [ ] Descarga automática de media desde n8n
-- [ ] Batch generation (múltiples shots simultáneamente)
-- [ ] Retry logic mejorado
-- [ ] Historial de versiones completo
-- [ ] Export directo a Adobe Premiere
-- [ ] Integración con Claude para generación de scripts
-
----
-
-## 📞 Cómo Trabajamos Juntos
-
-**Yo (Claude Code):**
-- Ejecuto los scripts
-- Construyo prompts inteligentes
-- Me comunico con n8n
-- Gestiono archivos y metadata
-- Actualizo Obsidian notes
-
-**Tú:**
-- Defines el concepto (script + dirección de arte)
-- Revises en Obsidian
-- Das feedback
-- Apruebas elementos
-- Exportas final para editar
-
-**n8n:**
-- Recibe requests
-- Genera media
-- Devuelve URLs
-
-**Obsidian:**
-- Muestra todo visualmente
-- Facilita aprobaciones
-- Guarda feedback
-
----
-
-## 🎯 Empezamos?
-
-Cuando leas este archivo, me avisas y podemos:
-
-1. **Instalar dependencias** (npm install)
-2. **Configurar .env** con tu n8n
-3. **Crear primer proyecto de prueba**
-4. **Hacer test end-to-end** del sistema completo
-
-¿Listo?
+**Y listo, empezamos a hacer magia 🎬**
 

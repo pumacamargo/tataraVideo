@@ -1,0 +1,15 @@
+{
+  "baseFontSize": 16,
+  "baseTheme": "dark",
+  "cssTheme": "",
+  "foldHeading": true,
+  "foldIndent": true,
+  "showLineNumber": true,
+  "showFrontmatter": false,
+  "showBacklinks": true,
+  "showOutlineInEditorMode": true,
+  "strictLineBreaks": false,
+  "showEmojiInNoteTitle": true,
+  "useTab": true,
+  "tabSize": 2
+}
