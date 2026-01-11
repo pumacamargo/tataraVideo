@@ -202,6 +202,21 @@ Tú: Descargas y editas en Adobe Premiere 🎬
 
 ## 🛠️ Cómo Funciono
 
+### Tracking Interno (WIP.md)
+
+**Dato:** Mantengo un archivo `WIP.md` en la raíz del proyecto para:
+- Registrar progress actual
+- Documentar bloqueantes
+- Listar próximas fases
+- Guardar notas técnicas
+
+**Uso:** Si la conexión se pierde, abre WIP.md para ver exactamente en qué estábamos y continuar.
+
+```
+tataraVideo/
+└── WIP.md  ← Aquí está todo documentado (NO en vault)
+```
+
 ### Creación de Proyecto
 
 **Conversación:**
@@ -216,11 +231,9 @@ Yo: ✅ Script actualizado
 ```
 
 **Detrás de escenas:**
-- Creo `vault/projects/mi-video/`
-- Creo `Script.md` con estructura
-- Creo `Direccion-Arte.md` vacío
-- Creo `media/mi-video/` con subcarpetas
-- Creo `project.json` con metadata
+- Creo `vault/00_projects/mi-video/` con estructura numerada (00_Status, 01_Concept, etc)
+- Creo `media/mi-video/` con carpetas: art/, locations/, shots/, final/
+- Creo archivo WIP.md en raíz para tracking interno
 
 ### Construcción de Prompts
 
@@ -300,23 +313,31 @@ POST https://tu-n8n-vps.com/webhook/generate-media
 ```
 tataraVideo/
 ├── vault/
-│   ├── projects/
-│   │   └── space-adventure/
-│   │       ├── project.json (metadata)
-│   │       ├── Script.md
-│   │       ├── Direccion-Arte.md
-│   │       ├── shot-01.md
-│   │       ├── shot-02.md
-│   │       └── shot-03.md
-│   └── templates/ (no se modifica)
+│   ├── 00_projects/
+│   │   └── _youtube-example-project/
+│   │       ├── 00_Status.md
+│   │       ├── 01_Concept.md
+│   │       ├── 02_Direccion-Arte.md
+│   │       ├── 03_Shot-ideas.md
+│   │       ├── 04_Script.md
+│   │       ├── 05_Prompts.md
+│   │       ├── 06_Music.md
+│   │       └── 07_Youtube.md
+│   ├── 01_guides/
+│   └── 02_templates/
 │
-└── media/
-    └── space-adventure/
-        ├── shots/
-        │   ├── shot-01/ (video.mp4, audio.mp3, music.mp3)
-        │   ├── shot-02/
-        │   └── shot-03/
-        └── final/ (export)
+├── media/
+│   └── _youtube-example-project/
+│       ├── art/
+│       │   └── characters/ (pomerania-police.jpg, pomerania-pajamas.jpg)
+│       ├── locations/ (locaciones generadas)
+│       ├── shots/
+│       │   ├── shot-01/ (video.mp4, audio.mp3, music.mp3)
+│       │   ├── shot-02/
+│       │   └── ... (hasta shot-24)
+│       └── final/ (export compilado)
+│
+└── WIP.md (tracking interno, NO en vault)
 ```
 
 ---
@@ -349,8 +370,21 @@ tataraVideo/
  - Estilo: Cinematográfico
  - Mood: Épico
  - Colores: azul, naranja
- - Referencias: [links]"
-→ Yo edito Direccion-Arte.md
+ - Referencias: [links visuales]"
+→ Yo edito Direccion-Arte.md e integro referencias locales
+```
+
+**Referencias de Personajes:**
+```
+"Coloca tus imágenes de referencia en:
+ /media/proyecto/art/characters/
+
+ Con nombres descriptivos:
+ - personaje-pose1.jpg
+ - personaje-pose2.jpg
+ - personaje-outfit.jpg"
+→ Yo las integro en Direccion-Arte.md
+→ Las uso como base para generar media consistente
 ```
 
 ### Generar Media
@@ -447,47 +481,77 @@ Yo: ✅ Todo en media/astronautas/final/
 
 ## 📊 Estructura de Archivos
 
-### project.json (Metadata)
-```json
-{
-  "name": "space-adventure",
-  "createdAt": "2025-01-09T12:00:00Z",
-  "status": "in-progress",
-  "shots": ["shot-01", "shot-02", "shot-03"],
-  "description": "Video sobre astronautas",
-  "artDirection": {
-    "style": "Cinematográfico",
-    "mood": "Épico",
-    "colors": ["#0a1428", "#ff6b35"]
-  }
-}
-```
+### Archivos de Proyecto (Vault)
 
-### shot-XX.md (Template actualizado)
+Cada proyecto tiene archivos numerados para organización clara:
+
 ```markdown
-# Shot 01
-
-## Info
-- ID: shot-01
-- Duración: 5s
-- Descripción: Astronauta en cápsula
-
-## Aprobaciones
-- [ ] First frame
-  Status: Generado
-  URL: [link]
-  Aprobado: [checkbox]
-  Feedback: "..."
-
-- [ ] Last frame
-- [ ] Video
-- [ ] Audio
-- [ ] Música
-
-## Historial
-v1: First frame generado
-v2: Regenerado (más luz)
+00_Status.md          - Checklist general del proyecto
+01_Concept.md         - Idea, selling pitch, parámetros
+02_Direccion-Arte.md  - Estilo, paleta, referencias visuales
+03_Shot-ideas.md      - Brainstorm de escenas
+04_Script.md          - Descripción detallada de cada shot
+05_Prompts.md         - Prompts listos para generar media
+06_Music.md           - Notas sobre música/narración
+07_Youtube.md         - Metadata para YouTube (si aplica)
 ```
+
+### Estructura de Media
+
+**art/characters/** - Referencias visuales del personaje
+```
+pomerania-police.jpg    ← Personaje con uniforme
+pomerania-pajamas.jpg   ← Personaje con pijama
+```
+
+**locations/** - Escenarios generados
+```
+bedroom.jpg
+kitchen.jpg
+police-station.jpg
+street.jpg
+bathroom.jpg
+```
+
+**shots/shot-XX/** - Assets por shot
+```
+shot-01/
+├── first-frame.jpg
+├── last-frame.jpg
+├── video.mp4
+├── audio.mp3
+└── music.mp3
+```
+
+**final/** - Compilado para edición
+```
+manifest.json
+├── shot-01/
+│   ├── video.mp4
+│   ├── audio.mp3
+│   └── music.mp3
+└── ... (resto de shots)
+```
+
+### Convención de Nombres para Referencias
+
+Las imágenes de personajes y locaciones se diferencian por nombres descriptivos:
+
+```
+art/characters/
+├── pomerania-police.jpg     (con uniforme policía)
+├── pomerania-pajamas.jpg    (con pijama)
+
+locations/
+├── bedroom.jpg              (habitación/dormitorio)
+├── kitchen.jpg              (cocina)
+├── police-station-interior.jpg
+├── police-station-exterior.jpg
+├── street.jpg
+└── bathroom.jpg
+```
+
+**Ventaja:** No hay necesidad de carpetas anidadas, todo es claro con nombres.
 
 ---
 
@@ -560,12 +624,35 @@ Generar → Obsidian Preview → ✅ Aprobado ✅
 
 ## 🚀 Empezamos?
 
-Cuando estés listo:
+**Ejemplo completado:** `_youtube-example-project`
+- Script expandido con 24 shots
+- Dirección de arte definida
+- Estructura de media lista
+- Tracking en WIP.md
 
-1. Configura `.env` con tu n8n
-2. Tienes lista la estructura de carpetas
-3. Templates de Obsidian listos
+**Para tu próximo proyecto:**
+
+1. Dime el nombre del proyecto
+2. Proporciona referencias (imágenes en `/media/proyecto/art/characters/`)
+3. Configura tu `.env` con n8n URL
 4. Me dices: "Crea proyecto [nombre]"
 
+**Workflow:**
+1. Expandimos script → 04_Script.md
+2. Definimos dirección de arte → 02_Direccion-Arte.md
+3. Generamos prompts → 05_Prompts.md
+4. Generamos media via n8n → media/shots/
+5. Apruebas en Obsidian
+6. Export final
+
 **Y listo, empezamos a hacer magia 🎬**
+
+---
+
+## 📌 Notas Importantes
+
+- **WIP.md:** Archivo de tracking INTERNO (no en vault)
+- **Nombres simples:** Usa nombres descriptivos para diferenciar (no carpetas complejas)
+- **Obsidian:** Es tu interfaz visual para revisar y aprobar
+- **n8n:** Hace toda la generación (tú controlas desde aquí, yo orquesto)
 

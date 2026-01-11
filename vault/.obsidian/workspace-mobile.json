@@ -1,0 +1,185 @@
+{
+  "main": {
+    "id": "f6924fc678f00bfd",
+    "type": "split",
+    "children": [
+      {
+        "id": "5385d5452e9dc102",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "488fda97eacb7ffb",
+            "type": "leaf",
+            "state": {
+              "type": "markdown",
+              "state": {
+                "file": "01_guides/Videos profesionales.md",
+                "mode": "source",
+                "source": false
+              },
+              "icon": "lucide-file",
+              "title": "Videos profesionales"
+            }
+          }
+        ]
+      }
+    ],
+    "direction": "vertical"
+  },
+  "left": {
+    "id": "6283efb2741059c2",
+    "type": "mobile-drawer",
+    "children": [
+      {
+        "id": "927fe475a2b669d9",
+        "type": "leaf",
+        "state": {
+          "type": "file-explorer",
+          "state": {
+            "sortOrder": "alphabetical",
+            "autoReveal": true
+          },
+          "icon": "lucide-folder-closed",
+          "title": "Files"
+        }
+      },
+      {
+        "id": "d193cc9cd8f7b32a",
+        "type": "leaf",
+        "state": {
+          "type": "search",
+          "state": {
+            "query": "",
+            "matchingCase": false,
+            "explainSearch": false,
+            "collapseAll": false,
+            "extraContext": false,
+            "sortOrder": "alphabetical"
+          },
+          "icon": "lucide-search",
+          "title": "Search"
+        }
+      },
+      {
+        "id": "93a04191537ebb3a",
+        "type": "leaf",
+        "state": {
+          "type": "tag",
+          "state": {
+            "sortOrder": "frequency",
+            "useHierarchy": true,
+            "showSearch": false,
+            "searchQuery": ""
+          },
+          "icon": "lucide-tags",
+          "title": "Tags"
+        }
+      },
+      {
+        "id": "b75e0cc956c5ef33",
+        "type": "leaf",
+        "state": {
+          "type": "all-properties",
+          "state": {
+            "sortOrder": "frequency",
+            "showSearch": false,
+            "searchQuery": ""
+          },
+          "icon": "lucide-archive",
+          "title": "All properties"
+        }
+      },
+      {
+        "id": "e865f1bbbb4b9ec8",
+        "type": "leaf",
+        "state": {
+          "type": "bookmarks",
+          "state": {},
+          "icon": "lucide-bookmark",
+          "title": "Bookmarks"
+        }
+      }
+    ],
+    "currentTab": 0
+  },
+  "right": {
+    "id": "2ff4d5db0de5b32a",
+    "type": "mobile-drawer",
+    "children": [
+      {
+        "id": "ea393776a6800957",
+        "type": "leaf",
+        "state": {
+          "type": "backlink",
+          "state": {
+            "file": "01_guides/Videos profesionales.md",
+            "collapseAll": false,
+            "extraContext": false,
+            "sortOrder": "alphabetical",
+            "showSearch": false,
+            "searchQuery": "",
+            "backlinkCollapsed": false,
+            "unlinkedCollapsed": true
+          },
+          "icon": "links-coming-in",
+          "title": "Backlinks"
+        }
+      },
+      {
+        "id": "a19eecd796412be0",
+        "type": "leaf",
+        "state": {
+          "type": "outgoing-link",
+          "state": {
+            "file": "projects/_youtube-example-project/01_Concept.md",
+            "linksCollapsed": false,
+            "unlinkedCollapsed": true
+          },
+          "icon": "links-going-out",
+          "title": "Outgoing links"
+        }
+      },
+      {
+        "id": "0d27fb07a8bbc74b",
+        "type": "leaf",
+        "state": {
+          "type": "outline",
+          "state": {
+            "file": "projects/_youtube-example-project/01_Concept.md",
+            "followCursor": false,
+            "showSearch": false,
+            "searchQuery": ""
+          },
+          "icon": "lucide-list",
+          "title": "Outline"
+        }
+      }
+    ],
+    "currentTab": 0
+  },
+  "left-ribbon": {
+    "hiddenItems": {
+      "switcher:Open quick switcher": false,
+      "graph:Open graph view": false,
+      "canvas:Create new canvas": false,
+      "daily-notes:Open today's daily note": false,
+      "templates:Insert template": false,
+      "command-palette:Open command palette": false,
+      "bases:Create new base": false
+    }
+  },
+  "active": "488fda97eacb7ffb",
+  "lastOpenFiles": [
+    "01_guides/Videos para youtube profesionales.md",
+    "01_guides/Videos profesionales.md",
+    "00_projects/_youtube-example-project/07_Youtube.md",
+    "00_projects/_youtube-example-project/05_Prompts.md",
+    "00_projects/_youtube-example-project/00_Status.md",
+    "00_projects/_youtube-example-project/03_Shot-ideas.md",
+    "00_projects/_youtube-example-project/02_Direccion-Arte.md",
+    "00_projects/_youtube-example-project/01_Concept.md",
+    "00_projects/_youtube-example-project/04_Script.md",
+    "00_projects/_youtube-example-project/06_Music.md",
+    "01_guides"
+  ]
+}
