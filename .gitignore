@@ -6,7 +6,6 @@ dist/
 build/
 *.log
 logs/
-media/
 .obsidian/workspace
 .obsidian/plugins
 .obsidian/community-plugins.json
